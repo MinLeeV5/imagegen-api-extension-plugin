@@ -1,0 +1,24 @@
+{
+  "name": "imagegen-api",
+  "version": "1.0.0",
+  "description": "Generate and edit images through a configured API key with Flare or Sunburst.",
+  "license": "Apache-2.0",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Imagegen API",
+    "shortDescription": "API image generation with Flare and Sunburst",
+    "longDescription": "Generate, edit, and batch-create images using your own API key. Defaults to Flare, supports Sunburst, and keeps your configured endpoint.",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use Imagegen API to generate an image.",
+      "Use Imagegen API with Sunburst to edit an image."
+    ],
+    "brandColor": "#E4A326",
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/logo.png"
+  }
+}

@@ -1,0 +1,10 @@
+Imagegen API includes an adapted image_gen.py CLI and prompting references
+from the OpenAI Codex imagegen skill, distributed under Apache License 2.0.
+Upstream project: https://github.com/openai/codex
+
+Changes in this distribution: default Flare model; explicit Sunburst support;
+model-aware quality and custom-size validation; OPENAI_KEY alias; API-default
+skill instructions without repeated key-use confirmation; portable plugin
+packaging and inline dependency metadata.
+
+This is an independent extension, not an official OpenAI plugin.

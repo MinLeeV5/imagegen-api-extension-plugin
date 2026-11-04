@@ -1,0 +1,20 @@
+{
+  "name": "imagegen-api-marketplace",
+  "interface": {
+    "displayName": "Imagegen API"
+  },
+  "plugins": [
+    {
+      "name": "imagegen-api",
+      "source": {
+        "source": "local",
+        "path": "./plugins/imagegen-api"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

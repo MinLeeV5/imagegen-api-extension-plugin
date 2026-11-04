@@ -1,0 +1,4 @@
+interface:
+  display_name: "Imagegen API"
+  short_description: "Generate and edit images with Flare or Sunburst"
+  default_prompt: "Use $imagegen-api:imagegen-api to generate or edit an image through the configured API."
