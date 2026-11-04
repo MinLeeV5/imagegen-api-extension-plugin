@@ -1,0 +1,67 @@
+plugins/imagegen-api/skills/imagegen-api/references/cli.md
+  bdb0078a16b9cade 1-87
+LICENSE
+  bdb0078a16b9cade 1-201
+plugins/imagegen-api/skills/imagegen-api/references/setup.md
+  bdb0078a16b9cade 1-18
+plugins/imagegen-api/skills/imagegen-api/scripts/image_gen.py
+  bdb0078a16b9cade 1-1058
+tests/test_api_cli.py
+  bdb0078a16b9cade 1-162
+.gitignore
+  bdb0078a16b9cade 1-9
+plugins/imagegen-api/plugin.json
+  bdb0078a16b9cade 1-35
+NOTICE
+  bdb0078a16b9cade 1-10
+plugins/imagegen-api/skills/imagegen-api/references/sample-prompts.md
+  bdb0078a16b9cade 1-422
+.agents/plugins/marketplace.json
+  bdb0078a16b9cade 1-20
+requirements.txt
+  bdb0078a16b9cade 1-2
+README.md
+  bdb0078a16b9cade 1-108
+plugins/imagegen-api/NOTICE
+  bdb0078a16b9cade 1-10
+plugins/imagegen-api/skills/imagegen-api/references/image-api.md
+  bdb0078a16b9cade 1-47
+plugins/imagegen-api/skills/imagegen-api/agents/openai.yaml
+  bdb0078a16b9cade 1-4
+plugins/imagegen-api/LICENSE
+  bdb0078a16b9cade 1-201
+plugins/imagegen-api/skills/imagegen-api/references/prompting.md
+  bdb0078a16b9cade 1-112
+plugins/imagegen-api/.codex-plugin/plugin.json
+  bdb0078a16b9cade 1-24
+plugins/imagegen-api/skills/imagegen-api/SKILL.md
+  bdb0078a16b9cade 1-41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.2",
+  "base_commit_sha": "c0973712a0e90e2a4334161b779dfa20dea679bd",
+  "prompts": {
+    "bdb0078a16b9cade": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a04d-94b9-7c51-a83c-8fe78ff49431",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "李伟民 <liweimin@cvte.com>",
+      "messages": [],
+      "total_additions": 2571,
+      "total_deletions": 0,
+      "accepted_lines": 2571,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/915b93a79e9464cb6a26d1ad2fc06d5eb705acc8dc3050a95b8b00a25bd28277",
+      "token_usage": {
+        "input_tokens": 1865585,
+        "output_tokens": 180997,
+        "cache_read_tokens": 22169344,
+        "cache_creation_tokens": null,
+        "total_cost": null
+      }
+    }
+  }
+}
