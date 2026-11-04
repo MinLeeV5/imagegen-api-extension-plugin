@@ -10,6 +10,32 @@
 
 插件不会修改系统自带的 imagegen 技能。所选模型及参数能否使用，取决于用户配置的 API 服务和账号权限。
 
+## 让 Agent 帮你安装
+
+在能执行本机命令的 Codex 或其他本地 Agent 中，复制发送下面这段话：
+
+```text
+请帮我在本机安装 Imagegen API 插件：
+https://github.com/MinLeeV5/imagegen-api-extension-plugin
+
+先阅读仓库 README，检查当前环境是否支持 codex plugin 命令。
+支持时执行：
+codex plugin marketplace add MinLeeV5/imagegen-api-extension-plugin
+codex plugin add imagegen-api@imagegen-api-marketplace
+codex plugin list --marketplace imagegen-api-marketplace --json
+
+核对 imagegen-api 已安装且已启用；已有安装时沿用现有安装，避免重复配置。
+若没有 Codex CLI，按 README 的 ChatGPT Desktop 本地项目流程准备目录，
+并明确告诉我还需要在桌面界面完成哪些步骤。
+
+检查 OPENAI_API_KEY 或 OPENAI_KEY 是否已配置，仅报告配置状态，不显示密钥。
+已有配置直接沿用，保留 OPENAI_BASE_URL；缺少密钥时先完成插件安装，再给我本地配置方法。
+安装验证使用插件状态或 dry-run，不发起真实生图请求。
+最后报告安装结果、仍需我完成的步骤，以及如何在新对话中使用插件。
+```
+
+如果目标是 ChatGPT Desktop，可以在发送时补充“我要在 ChatGPT Desktop 中使用”。Agent 完成安装准备后，再按下方桌面步骤重启应用并选择插件；API Key 无需填写在这段指令里。
+
 ## 从 GitHub 安装
 
 需要支持 `codex plugin` 命令的 Codex。本包已在 Codex CLI `0.166.0` 验证安装、启用和技能发现。
