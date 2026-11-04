@@ -46,9 +46,40 @@ codex plugin add imagegen-api@imagegen-api-marketplace
 
 GitHub 安装和本地源码安装选择一种即可。
 
+## 在 ChatGPT Desktop 中安装
+
+以下使用官方文档中的本地插件目录流程，适用于已提供 **Work** 或 **Codex** 模式及 **Plugins Directory（插件目录）** 入口的 ChatGPT 桌面版本。
+
+### 已安装 Codex CLI
+
+1. 在终端添加本仓库的插件目录：
+
+   ```bash
+   codex plugin marketplace add MinLeeV5/imagegen-api-extension-plugin
+   ```
+
+2. 完全退出并重新打开 **ChatGPT Desktop**。
+3. 进入 **Work** 或 **Codex** 模式，打开 **Plugins Directory（插件目录）**。
+4. 在目录来源选择器中选择 **Imagegen API**，其目录标识为 `imagegen-api-marketplace`。
+5. 打开 **Imagegen API** 插件，点击 **Install（安装）**，确认插件已启用。若此前已按上面的 CLI 步骤安装，则查看现有安装状态即可。
+6. 开启新对话，发送“使用 Imagegen API 插件，生成一只黄色小鸭”。运行环境和 API Key 按下节配置。
+
+### 没有 Codex CLI
+
+1. 从本仓库的 **Code → Download ZIP** 下载并解压，或使用 Git 克隆仓库。
+2. 在 ChatGPT Desktop 的 Work/Codex 中，将解压或克隆后的**仓库根目录**作为本地项目目录。该目录应同时包含 `.agents/` 和 `plugins/`；不要只打开 `plugins/imagegen-api/` 子目录。
+3. 本仓库已包含 `.agents/plugins/marketplace.json`，无需另建目录清单。完全退出并重开 ChatGPT Desktop，再回到该本地项目。
+4. 按上面的第 3–6 步，在插件目录切换到 **Imagegen API** 来源并安装。
+
+如果桌面应用没有 Work/Codex 或插件目录入口，需要先确认所用版本和账号是否提供这些功能；普通聊天页的图片生成功能不承担此插件的安装。
+
+官方流程参考：[OpenAI 文档：自定义插件目录](https://developers.openai.com/plugins/build/plugins#build-your-own-curated-plugin-list)与[本地插件安装](https://developers.openai.com/plugins/build/plugins#install-a-local-plugin-manually)。桌面界面步骤依据官方文档编写；本仓库的安装、启用与技能发现已通过 Codex CLI 验证。
+
 ## 配置密钥和运行环境
 
-每位使用者配置自己的 `OPENAI_API_KEY` 或 `OPENAI_KEY`，确保启动 Codex 的进程能够读取它。两者都有值时使用 `OPENAI_API_KEY`。已有配置可以直接使用，无需在对话中提交密钥。插件不自动加载 `.env` 文件。
+每位使用者配置自己的 `OPENAI_API_KEY` 或 `OPENAI_KEY`，确保 Codex 或 ChatGPT Desktop 执行脚本的环境能够读取它。两者都有值时使用 `OPENAI_API_KEY`。已有配置可以直接使用，无需在对话中提交密钥。插件不自动加载 `.env` 文件。
+
+仅在某个终端中设置环境变量，不代表从 Dock 或开始菜单启动的 ChatGPT Desktop 能读取这些变量；桌面端使用时也要确认其运行环境中已配置密钥。
 
 兼容服务可以设置 `OPENAI_BASE_URL`；未设置时使用 OpenAI SDK 默认地址。本包不含密钥或私人服务地址。
 
