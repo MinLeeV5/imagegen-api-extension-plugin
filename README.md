@@ -25,6 +25,8 @@ codex plugin add imagegen-api@imagegen-api-marketplace
 codex plugin list --marketplace imagegen-api-marketplace --json
 
 核对 imagegen-api 已安装且已启用；已有安装时沿用现有安装，避免重复配置。
+同时把此插件设为我的默认生图方式：在用户级 AGENTS.md 中追加下文
+“设为默认生图方式”的偏好，保留已有内容，并保持系统 imagegen 原版可用。
 若没有 Codex CLI，按 README 的 ChatGPT Desktop 本地项目流程准备目录，
 并明确告诉我还需要在桌面界面完成哪些步骤。
 
@@ -35,6 +37,24 @@ codex plugin list --marketplace imagegen-api-marketplace --json
 ```
 
 如果目标是 ChatGPT Desktop，可以在发送时补充“我要在 ChatGPT Desktop 中使用”。Agent 完成安装准备后，再按下方桌面步骤重启应用并选择插件；API Key 无需填写在这段指令里。
+
+## 设为默认生图方式
+
+插件已开启自动调用。与系统 imagegen 同时可用时，通过用户级默认指令明确优先选择本插件；安装本身不会改写系统技能或自动修改全局偏好。
+
+可以让 Agent 按上面的安装指令设置，也可以自行在用户级 `AGENTS.md` 追加以下内容，保留文件原有指令。Codex 默认位置是 `~/.codex/AGENTS.md`；自定义 `CODEX_HOME` 时使用该目录下的 `AGENTS.md`。
+
+```markdown
+## 图片生成偏好
+
+普通图片生成、编辑、参考图和透明图片请求，默认优先使用
+$imagegen-api:imagegen-api 插件，按插件说明调用 API。
+仅在我明确要求内置工具或订阅生图时，使用系统 imagegen 的内置流程。
+已有 OPENAI_API_KEY 或 OPENAI_KEY 配置时，直接用于我请求的生图任务，
+无需再次确认使用密钥；保留 OPENAI_BASE_URL 和明确指定的模型。
+```
+
+此偏好会让普通生图请求优先选择插件，同时保留系统技能供明确选择内置生图时使用。修改后开启新对话；显式调用本插件的完整技能名也可直接选择该工作流。
 
 ## 从 GitHub 安装
 

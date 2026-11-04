@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "imagegen-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Generate and edit images through a configured API key with Flare or Sunburst.",
   "license": "Apache-2.0",
   "keywords": [

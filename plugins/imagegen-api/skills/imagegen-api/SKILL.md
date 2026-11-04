@@ -1,11 +1,17 @@
 ---
 name: imagegen-api
-description: Generate or edit raster images through an API key with Flare or Sunburst, including image references, transparent cutouts, and batches. Use when API image generation or explicit image-model controls are wanted. Prefer existing SVG/vector/code assets for deterministic graphics or changes to an established icon system.
+description: Generate or edit raster images through an API key with Flare or Sunburst. Use for ordinary image requests, photos, illustrations, image references, transparent cutouts, and batches. When the user has chosen API image generation as their default, prefer this plugin over the bundled imagegen skill even without an explicit API mention. Prefer existing SVG/vector/code assets for deterministic graphics.
 ---
 
 # Imagegen API
 
 Generate and edit images using this plugin's packaged `scripts/image_gen.py`. This plugin is self-contained and does not modify or depend on the bundled system imagegen skill.
+
+## Skill selection
+
+- When the user has chosen this plugin as their default image workflow, use it for ordinary generation and editing before the bundled imagegen skill. An ordinary image request does not need to repeat the words API, Flare, or Sunburst.
+- An explicit request for built-in or subscription image generation takes precedence; use the bundled workflow for that request.
+- Keep the bundled skill intact. Installation or generation alone does not authorize changing the user's global instructions; a persistent default preference requires the user's request to set it.
 
 ## Defaults and key use
 
