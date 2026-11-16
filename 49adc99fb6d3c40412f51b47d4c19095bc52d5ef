@@ -1,0 +1,55 @@
+plugins/imagegen-api/skills/imagegen-api/references/sample-prompts.md
+  e36fbf21b0e15e47 19-21
+plugins/imagegen-api/skills/imagegen-api/references/cli.md
+  e36fbf21b0e15e47 7-9,24,32,59
+plugins/imagegen-api/skills/imagegen-api/scripts/image_gen.py
+  e36fbf21b0e15e47 11,30,41,46-50,52-54,186,204,224,959,998
+tests/test_api_cli.py
+  e36fbf21b0e15e47 87,94-95,97-111,126,136-139,142-143,146-162,165-190,192-195,200-210,221-235
+plugins/imagegen-api/plugin.json
+  e36fbf21b0e15e47 4-5,11,19-20
+plugins/imagegen-api/.codex-plugin/plugin.json
+  e36fbf21b0e15e47 3-4,9-10
+plugins/imagegen-api/skills/imagegen-api/SKILL.md
+  e36fbf21b0e15e47 3,18,44
+plugins/imagegen-api/skills/imagegen-api/references/image-api.md
+  e36fbf21b0e15e47 9-11,15,19,38
+README.md
+  e36fbf21b0e15e47 3,140-142,145,153,161
+NOTICE
+  e36fbf21b0e15e47 5-6
+plugins/imagegen-api/NOTICE
+  e36fbf21b0e15e47 5-6
+plugins/imagegen-api/skills/imagegen-api/agents/openai.yaml
+  e36fbf21b0e15e47 3
+plugins/imagegen-api/skills/imagegen-api/references/prompting.md
+  e36fbf21b0e15e47 82,85
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "49adc99fb6d3c40412f51b47d4c19095bc52d5ef",
+  "prompts": {
+    "e36fbf21b0e15e47": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1e229-e6f4-7300-9ecb-2a7a9f2400a6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "李伟民 <liweimin@cvte.com>",
+      "messages": [],
+      "total_additions": 155,
+      "total_deletions": 67,
+      "accepted_lines": 155,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/4653a81d223fc2b4b4846b575ecf0cd572e25520fad3886da1b02c2d25e311d7",
+      "token_usage": {
+        "input_tokens": 97868,
+        "output_tokens": 13911,
+        "cache_read_tokens": 1294592,
+        "cache_creation_tokens": null,
+        "total_cost": null
+      }
+    }
+  }
+}
