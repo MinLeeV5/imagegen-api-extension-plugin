@@ -1,6 +1,6 @@
 # Imagegen API
 
-独立的 Codex 图片生成插件，使用用户自己的 API Key。默认请求 `gpt-image-2.5-flare`，也支持明确选择 `gpt-image-2.5-sunburst`。
+独立的 Codex 图片生成插件，使用用户自己的 API Key。默认请求 `gpt-image-2.6-flare`，也支持明确选择 `gpt-image-2.6-sunburst`；保留 2.5 模型兼容。
 
 - 支持生成、编辑、参考图、透明图片和批量任务。
 - 已配置密钥时，执行用户请求的生图任务无需再次确认使用密钥。
@@ -137,10 +137,12 @@ GitHub 安装和本地源码安装选择一种即可。
 使用 imagegen-api 插件，生成一只黄色小鸭。
 ```
 
-默认请求 `gpt-image-2.5-flare`，`size=auto`，`quality=medium`，输出 PNG。
+默认请求 `gpt-image-2.6-flare`，`size=auto`，`quality=medium`，输出 PNG。
+
+`image-2.6` 和 `flare` 是 `gpt-image-2.6-flare` 的别名；`sunburst` 指向 `gpt-image-2.6-sunburst`。需要使用 2.5 时，请指定完整模型名 `gpt-image-2.5-flare` 或 `gpt-image-2.5-sunburst`，插件会保留该选择。
 
 ```text
-使用 imagegen-api 插件，指定 gpt-image-2.5-sunburst，生成一只黄色小鸭，
+使用 imagegen-api 插件，指定 gpt-image-2.6-sunburst，生成一只黄色小鸭，
 横版 1536×1024，quality=xhigh。
 ```
 
@@ -148,7 +150,7 @@ GitHub 安装和本地源码安装选择一种即可。
 
 ## 直接运行脚本
 
-在本包根目录运行默认 Flare 生成：
+在本包根目录运行默认 2.6 Flare 生成：
 
 ```bash
 uv run --script plugins/imagegen-api/skills/imagegen-api/scripts/image_gen.py generate \
@@ -156,7 +158,7 @@ uv run --script plugins/imagegen-api/skills/imagegen-api/scripts/image_gen.py ge
   --out output/imagegen/duck.png
 ```
 
-使用 Sunburst：
+使用 2.6 Sunburst：
 
 ```bash
 uv run --script plugins/imagegen-api/skills/imagegen-api/scripts/image_gen.py generate \

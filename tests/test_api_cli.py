@@ -84,15 +84,31 @@ class ExtensionTest(unittest.TestCase):
                 self.assertNotIn(value.strip(), result.stdout + result.stderr)
         return result
 
-    def test_generate_uses_default_flare_and_alias_key_without_input(self):
+    def test_generate_uses_default_26_flare_and_alias_key_without_input(self):
         out = self.root / 'duck.png'
         result = self.run_cli(['generate', '--prompt', 'A duck', '--out', str(out)], alias='fixture-alias-secret')
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(out.read_bytes(), IMAGE)
         self.assertEqual(len(REQUESTS), 1)
         self.assertEqual(REQUESTS[0]['authorization'], 'Bearer fixture-alias-secret')
-        self.assertEqual(REQUESTS[0]['payload']['model'], 'gpt-image-2.5-flare')
+        self.assertEqual(REQUESTS[0]['path'], '/v1/images/generations')
+        self.assertEqual(REQUESTS[0]['payload']['model'], 'gpt-image-2.6-flare')
         self.assertEqual(REQUESTS[0]['payload']['quality'], 'medium')
+        self.assertEqual(REQUESTS[0]['payload']['size'], 'auto')
+        self.assertEqual(REQUESTS[0]['payload']['output_format'], 'png')
+
+    def test_edit_uses_default_26_flare(self):
+        image = self.root / 'input.png'
+        image.write_bytes(IMAGE)
+        out = self.root / 'edited.png'
+        result = self.run_cli(['edit', '--image', str(image), '--prompt', 'Preserve the duck',
+                               '--out', str(out)], alias='fixture-edit-secret')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(out.read_bytes(), IMAGE)
+        self.assertEqual(len(REQUESTS), 1)
+        self.assertEqual(REQUESTS[0]['path'], '/v1/images/edits')
+        self.assertEqual(REQUESTS[0]['payload']['model'], 'gpt-image-2.6-flare')
+        self.assertEqual(REQUESTS[0]['payload']['image'], IMAGE)
 
     def test_edit_sunburst_and_canonical_key_precedence(self):
         image = self.root / 'input.png'
@@ -107,7 +123,7 @@ class ExtensionTest(unittest.TestCase):
         self.assertEqual(REQUESTS[0]['path'], '/v1/images/edits')
         self.assertEqual(REQUESTS[0]['authorization'], 'Bearer fixture-canonical-secret')
         payload = REQUESTS[0]['payload']
-        self.assertEqual(payload['model'], 'gpt-image-2.5-sunburst')
+        self.assertEqual(payload['model'], 'gpt-image-2.6-sunburst')
         self.assertEqual(payload['quality'], 'max')
         self.assertEqual(payload['size'], '2160x3840')
         self.assertEqual(payload['background'], 'transparent')
@@ -117,29 +133,81 @@ class ExtensionTest(unittest.TestCase):
         jobs.write_text('\n'.join(json.dumps(job) for job in [
             {'prompt': 'A duck', 'model': 'flare', 'quality': 'xhigh', 'size': '3840x2160', 'out': 'duck.png'},
             {'prompt': 'A mug', 'model': 'sunburst', 'quality': 'max', 'out': 'mug.png'},
+            {'prompt': 'A shell', 'out': 'shell.png'},
+            {'prompt': 'A vase', 'model': 'image-2.6', 'out': 'vase.png'},
+            {'prompt': 'A flower', 'model': 'gpt-image-2.5-flare', 'quality': 'max', 'out': 'flower.png'},
+            {'prompt': 'A tree', 'model': 'gpt-image-2.5-sunburst', 'quality': 'xhigh', 'size': '2160x3840', 'out': 'tree.png'},
         ]))
         out = self.root / 'batch'
-        result = self.run_cli(['generate-batch', '--input', str(jobs), '--out-dir', str(out), '--concurrency', '2'],
+        result = self.run_cli(['generate-batch', '--input', str(jobs), '--out-dir', str(out),
+                               '--concurrency', '2', '--no-augment'],
                               alias='fixture-async-secret')
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual((out / 'duck.png').read_bytes(), IMAGE)
-        self.assertEqual((out / 'mug.png').read_bytes(), IMAGE)
-        payloads = {r['payload']['model']: r['payload'] for r in REQUESTS}
-        self.assertEqual(set(payloads), {'gpt-image-2.5-flare', 'gpt-image-2.5-sunburst'})
-        self.assertEqual(payloads['gpt-image-2.5-flare']['quality'], 'xhigh')
-        self.assertEqual(payloads['gpt-image-2.5-flare']['size'], '3840x2160')
+        self.assertEqual(len(REQUESTS), 6)
+        payloads = {r['payload']['prompt']: r['payload'] for r in REQUESTS}
+        for subject, model in (
+            ('duck', 'gpt-image-2.6-flare'), ('mug', 'gpt-image-2.6-sunburst'),
+            ('shell', 'gpt-image-2.6-flare'), ('vase', 'gpt-image-2.6-flare'),
+            ('flower', 'gpt-image-2.5-flare'), ('tree', 'gpt-image-2.5-sunburst'),
+        ):
+            with self.subTest(subject=subject):
+                self.assertEqual((out / (subject + '.png')).read_bytes(), IMAGE)
+                self.assertEqual(payloads['A ' + subject]['model'], model)
+        self.assertEqual(payloads['A duck']['quality'], 'xhigh')
+        self.assertEqual(payloads['A duck']['size'], '3840x2160')
+        self.assertEqual(payloads['A mug']['quality'], 'max')
+        self.assertEqual(payloads['A shell']['quality'], 'medium')
+        self.assertEqual(payloads['A flower']['quality'], 'max')
+        self.assertEqual(payloads['A tree']['quality'], 'xhigh')
+        self.assertEqual(payloads['A tree']['size'], '2160x3840')
         self.assertTrue(all(r['authorization'] == 'Bearer fixture-async-secret' for r in REQUESTS))
 
-    def test_dry_run_without_key_and_legacy_validation(self):
-        result = self.run_cli(['generate', '--prompt', 'A duck', '--model', 'flare', '--quality', 'max',
-                               '--size', '3840x2160', '--dry-run'])
+    def test_dry_run_without_key_normalizes_26_aliases_and_preserves_full_models(self):
+        for model, expected in (
+            ('image-2.6', 'gpt-image-2.6-flare'),
+            ('flare', 'gpt-image-2.6-flare'), ('sunburst', 'gpt-image-2.6-sunburst'),
+            ('gpt-image-2.6-flare', 'gpt-image-2.6-flare'),
+            ('gpt-image-2.6-sunburst', 'gpt-image-2.6-sunburst'),
+            ('gpt-image-2.5-flare', 'gpt-image-2.5-flare'),
+            ('gpt-image-2.5-sunburst', 'gpt-image-2.5-sunburst'),
+        ):
+            with self.subTest(model=model):
+                result = self.run_cli(['generate', '--prompt', 'A duck', '--model', model,
+                                       '--quality', 'max', '--size', '3840x2160',
+                                       '--background', 'transparent', '--dry-run'])
+                self.assertEqual(result.returncode, 0, result.stderr)
+                payload = json.loads(result.stdout)
+                self.assertEqual(payload['model'], expected)
+                self.assertEqual(payload['quality'], 'max')
+                self.assertEqual(payload['size'], '3840x2160')
+                self.assertEqual(payload['background'], 'transparent')
+        self.assertFalse(REQUESTS)
+
+    def test_batch_dry_run_uses_default_26_flare(self):
+        jobs = self.root / 'jobs.jsonl'
+        jobs.write_text(json.dumps({'prompt': 'A duck'}))
+        result = self.run_cli(['generate-batch', '--input', str(jobs),
+                               '--out-dir', str(self.root / 'batch'), '--dry-run'])
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(json.loads(result.stdout)['model'], 'gpt-image-2.5-flare')
+        self.assertEqual(json.loads(result.stdout)['model'], 'gpt-image-2.6-flare')
+        self.assertFalse(REQUESTS)
+
+    def test_rejects_invalid_options_before_network(self):
         for model in ('gpt-image-2', 'gpt-image-1.5'):
             with self.subTest(model=model):
                 result = self.run_cli(['generate', '--prompt', 'A duck', '--model', model, '--quality', 'max', '--dry-run'])
                 self.assertNotEqual(result.returncode, 0)
-        result = self.run_cli(['generate', '--prompt', 'A duck', '--model', 'sunburst', '--size', '4000x2160', '--dry-run'])
+        for size in ('4000x2160', '1025x1024', '3840x1024', '256x256', '3072x3072'):
+            with self.subTest(size=size):
+                result = self.run_cli(['generate', '--prompt', 'A duck', '--size', size],
+                                      alias='fixture-validation-secret')
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn('size', result.stderr)
+        result = self.run_cli(['generate', '--prompt', 'A duck', '--background', 'transparent',
+                               '--output-format', 'jpeg'], alias='fixture-validation-secret')
+        self.assertNotEqual(result.returncode, 0)
+        result = self.run_cli(['generate', '--prompt', 'A duck', '--quality', 'ultra'],
+                              alias='fixture-validation-secret')
         self.assertNotEqual(result.returncode, 0)
         self.assertFalse(REQUESTS)
 
@@ -150,12 +218,21 @@ class ExtensionTest(unittest.TestCase):
         self.assertFalse(REQUESTS)
 
     def test_error_preserves_model_without_fallback(self):
-        result = self.run_cli(['generate', '--model', 'sunburst', '--prompt', 'reject model'],
-                              canonical='fixture-error-secret')
-        self.assertNotEqual(result.returncode, 0)
-        self.assertEqual(len(REQUESTS), 1)
-        self.assertEqual(REQUESTS[0]['payload']['model'], 'gpt-image-2.5-sunburst')
-        self.assertFalse((self.root / 'output/imagegen/output.png').exists())
+        for model, expected in (
+            (None, 'gpt-image-2.6-flare'), ('sunburst', 'gpt-image-2.6-sunburst'),
+            ('gpt-image-2.5-flare', 'gpt-image-2.5-flare'),
+            ('gpt-image-2.5-sunburst', 'gpt-image-2.5-sunburst'),
+        ):
+            with self.subTest(model=model):
+                REQUESTS.clear()
+                args = ['generate', '--prompt', 'reject model']
+                if model is not None:
+                    args += ['--model', model]
+                result = self.run_cli(args, canonical='fixture-error-secret')
+                self.assertNotEqual(result.returncode, 0)
+                self.assertEqual(len(REQUESTS), 1)
+                self.assertEqual(REQUESTS[0]['payload']['model'], expected)
+                self.assertFalse((self.root / 'output/imagegen/output.png').exists())
 
 
 if __name__ == '__main__':

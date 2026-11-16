@@ -79,10 +79,10 @@ Do not add:
 - `quality`, `input_fidelity`, explicit masks, output format, and output paths are API execution controls.
 - Do not assume they are built-in `image_gen` tool arguments.
 - See `references/cli.md` and `references/image-api.md` for API controls; an existing key does not need repeated confirmation.
-- In API mode, `gpt-image-2.5-flare` is the default; use Sunburst when requested. Both support `quality=low|medium|high|xhigh|max|auto`. Match quality to the request.
+- In API mode, `gpt-image-2.6-flare` is the default; use `gpt-image-2.6-sunburst` when requested. Both support `quality=low|medium|high|xhigh|max|auto`. Match quality to the request and preserve explicit 2.5 model choices.
 - `gpt-image-2` always uses high fidelity for image inputs, so do not set `input_fidelity` with that model.
 - `gpt-image-2` compatibility mode rejects `background=transparent`; Flare and Sunburst support native transparency. Never silently change the selected model.
-- If the user asks for an explicit 4K canvas with a 2.5 model, use `3840x2160` for landscape or `2160x3840` for portrait.
+- If the user asks for an explicit 4K canvas with a 2.6 or 2.5 model, use `3840x2160` for landscape or `2160x3840` for portrait.
 
 ## Use-case tips
 Generate:

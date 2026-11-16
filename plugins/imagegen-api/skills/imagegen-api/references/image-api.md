@@ -6,16 +6,17 @@ This reference describes the API CLI, which is the default execution path for th
 
 | Model | Quality | Size | Transparency |
 | --- | --- | --- | --- |
-| `gpt-image-2.5-flare` (default; alias `flare`) | `low`, `medium`, `high`, `xhigh`, `max`, `auto` | `auto` or constrained custom dimensions | Native PNG/WebP |
-| `gpt-image-2.5-sunburst` (alias `sunburst`) | `low`, `medium`, `high`, `xhigh`, `max`, `auto` | `auto` or constrained custom dimensions | Native PNG/WebP |
+| `gpt-image-2.6-flare` (default; aliases `image-2.6`, `flare`) | `low`, `medium`, `high`, `xhigh`, `max`, `auto` | `auto` or constrained custom dimensions | Native PNG/WebP |
+| `gpt-image-2.6-sunburst` (alias `sunburst`) | `low`, `medium`, `high`, `xhigh`, `max`, `auto` | `auto` or constrained custom dimensions | Native PNG/WebP |
+| `gpt-image-2.5-flare`, `gpt-image-2.5-sunburst` (explicit compatibility choices) | `low`, `medium`, `high`, `xhigh`, `max`, `auto` | `auto` or constrained custom dimensions | Native PNG/WebP |
 | `gpt-image-2` (explicit compatibility choice) | `low`, `medium`, `high`, `auto` | `auto` or constrained custom dimensions | The CLI rejects `background=transparent` |
 | `gpt-image-1.5`, `gpt-image-1`, `gpt-image-1-mini` (explicit compatibility choices) | `low`, `medium`, `high`, `auto` | `1024x1024`, `1536x1024`, `1024x1536`, `auto` | PNG/WebP |
 
-Defaults are Flare, `size=auto`, `quality=medium`, PNG. Preserve a model or quality explicitly chosen by the user. Do not switch models on an error.
+Defaults are 2.6 Flare, `size=auto`, `quality=medium`, PNG. Preserve a model or quality explicitly chosen by the user, including full 2.5 model names. Do not switch models on an error.
 
 ## Custom dimensions
 
-The 2.5 models and the CLI's `gpt-image-2` compatibility path accept `WIDTHxHEIGHT` when:
+The CLI accepts `WIDTHxHEIGHT` for the 2.6 and 2.5 models and its `gpt-image-2` compatibility path when:
 
 - Both edges are multiples of 16.
 - Neither edge exceeds 3840 pixels.
@@ -34,7 +35,7 @@ Examples: `1024x1024`, `1536x1024`, `1024x1536`, `2048x2048`, `2048x1152`, `3840
 - `output_compression`: 0–100, JPEG/WebP only.
 - `moderation`: `auto` or `low` where supported.
 - Edits take `image` files and an optional `mask`; keep masks aligned with the first image and preserve the intended invariants in the prompt.
-- `input_fidelity=low|high` is edit-only for models that accept it. `gpt-image-2` always uses high input fidelity and the CLI rejects this option for that model. Do not add it by default to 2.5 requests.
+- `input_fidelity=low|high` is edit-only for models that accept it. `gpt-image-2` always uses high input fidelity and the CLI rejects this option for that model. Do not add it by default to 2.6 or 2.5 requests.
 
 Transparent output requires PNG or WebP. With Flare or Sunburst, request native alpha directly; do not switch to an older model to obtain transparency. Inspect alpha when transparency is an acceptance criterion.
 

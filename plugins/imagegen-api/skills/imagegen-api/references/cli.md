@@ -4,8 +4,9 @@ Use `scripts/image_gen.py` for requested image work. API mode is the default for
 
 ## Defaults
 
-- Model: `gpt-image-2.5-flare`.
-- Alternative: `--model gpt-image-2.5-sunburst`, or the alias `--model sunburst`.
+- Model: `gpt-image-2.6-flare`; aliases: `--model image-2.6` or `--model flare`.
+- Alternative: `--model gpt-image-2.6-sunburst`, or the alias `--model sunburst`.
+- Compatibility: use the full name `gpt-image-2.5-flare` or `gpt-image-2.5-sunburst` to keep using 2.5. Short aliases now select 2.6.
 - Size: `auto`; quality: `medium`; output: PNG.
 - Default output: `output/imagegen/output.png`; pass an explicit workspace-appropriate path when needed.
 - No automatic model substitution or switch to subscription generation on failure.
@@ -20,7 +21,7 @@ Prefer `uv run --script "$IMAGE_GEN" ...`; the script declares its Python depend
 
 ## Generate
 
-Default Flare:
+Default 2.6 Flare:
 
 ```bash
 uv run --script "$IMAGE_GEN" generate \
@@ -28,7 +29,7 @@ uv run --script "$IMAGE_GEN" generate \
   --out output/imagegen/duck.png
 ```
 
-Sunburst with explicit controls:
+2.6 Sunburst with explicit controls:
 
 ```bash
 uv run --script "$IMAGE_GEN" generate \
@@ -55,7 +56,7 @@ uv run --script "$IMAGE_GEN" edit \
 - Repeat `--image` for multiple inputs; their order matters.
 - `--mask` takes a PNG with alpha and applies to the first image. Match the target image dimensions and format. Masking is prompt-guided.
 - `--input-fidelity low|high` is edit-only. Do not pass it with `gpt-image-2`; use only where the selected model supports it.
-- Native transparency on either 2.5 model: `--background transparent --output-format png` (or `webp`). No older-model fallback is needed.
+- Native transparency on the selected 2.6 or 2.5 model: `--background transparent --output-format png` (or `webp`). No older-model fallback is needed.
 
 ## Distinct prompts and variants
 

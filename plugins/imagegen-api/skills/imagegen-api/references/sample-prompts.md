@@ -16,9 +16,9 @@ The labeled lines are prompt scaffolding, not a closed schema. `Asset type` and 
 Use the API CLI by default and use an existing `OPENAI_API_KEY` or `OPENAI_KEY` without repeated confirmation. CLI flags control quality, size, masks, and output paths; they are not built-in tool arguments.
 
 CLI model notes:
-- `gpt-image-2.5-flare` is the default; use `gpt-image-2.5-sunburst` when requested.
-- Both 2.5 models support `quality` values `low`, `medium`, `high`, `xhigh`, `max`, and `auto`.
-- For an explicit 4K canvas with a 2.5 model, use `3840x2160` or `2160x3840`.
+- `gpt-image-2.6-flare` is the default; use `gpt-image-2.6-sunburst` when requested. Preserve explicit full 2.5 model names.
+- The 2.6 and 2.5 models support `quality` values `low`, `medium`, `high`, `xhigh`, `max`, and `auto`.
+- For an explicit 4K canvas with a 2.6 or 2.5 model, use `3840x2160` or `2160x3840`.
 - Use native `background=transparent` with PNG/WebP on Flare or Sunburst. Never silently change models.
 - Do not set `input_fidelity` with `gpt-image-2`; image inputs already use high fidelity.
 

@@ -8,7 +8,7 @@
 # ///
 """API CLI for image generation or editing with GPT Image models.
 
-Defaults to gpt-image-2.5-flare. Accepts OPENAI_API_KEY or OPENAI_KEY and honors
+Defaults to gpt-image-2.6-flare. Accepts OPENAI_API_KEY or OPENAI_KEY and honors
 OPENAI_BASE_URL through the OpenAI SDK without interactive confirmation.
 """
 
@@ -27,7 +27,7 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 from io import BytesIO
 
-DEFAULT_MODEL = "gpt-image-2.5-flare"
+DEFAULT_MODEL = "gpt-image-2.6-flare"
 DEFAULT_SIZE = "auto"
 DEFAULT_QUALITY = "medium"
 DEFAULT_OUTPUT_FORMAT = "png"
@@ -38,16 +38,20 @@ GPT_IMAGE_MODEL_PREFIX = "gpt-image-"
 
 ALLOWED_LEGACY_SIZES = {"1024x1024", "1536x1024", "1024x1536", "auto"}
 ALLOWED_QUALITIES = {"low", "medium", "high", "auto"}
-GPT_IMAGE_25_QUALITIES = ALLOWED_QUALITIES | {"xhigh", "max"}
+EXTENDED_QUALITIES = ALLOWED_QUALITIES | {"xhigh", "max"}
 ALLOWED_BACKGROUNDS = {"transparent", "opaque", "auto", None}
 ALLOWED_INPUT_FIDELITIES = {"low", "high", None}
 
 GPT_IMAGE_2_MODEL = "gpt-image-2"
-GPT_IMAGE_25_MODELS = {"gpt-image-2.5-flare", "gpt-image-2.5-sunburst"}
-FLEXIBLE_SIZE_MODELS = GPT_IMAGE_25_MODELS | {GPT_IMAGE_2_MODEL}
+FLARE_SUNBURST_MODELS = {
+    "gpt-image-2.6-flare", "gpt-image-2.6-sunburst",
+    "gpt-image-2.5-flare", "gpt-image-2.5-sunburst",
+}
+FLEXIBLE_SIZE_MODELS = FLARE_SUNBURST_MODELS | {GPT_IMAGE_2_MODEL}
 MODEL_ALIASES = {
-    "flare": "gpt-image-2.5-flare",
-    "sunburst": "gpt-image-2.5-sunburst",
+    "image-2.6": "gpt-image-2.6-flare",
+    "flare": "gpt-image-2.6-flare",
+    "sunburst": "gpt-image-2.6-sunburst",
 }
 GPT_IMAGE_2_MIN_PIXELS = 655_360
 GPT_IMAGE_2_MAX_PIXELS = 8_294_400
@@ -179,7 +183,7 @@ def _validate_size(size: str, model: str) -> None:
 
 
 def _validate_quality(quality: str, model: str) -> None:
-    allowed = GPT_IMAGE_25_QUALITIES if model in GPT_IMAGE_25_MODELS else ALLOWED_QUALITIES
+    allowed = EXTENDED_QUALITIES if model in FLARE_SUNBURST_MODELS else ALLOWED_QUALITIES
     if quality not in allowed:
         _die(f"quality for {model} must be one of {', '.join(sorted(allowed))}.")
 
@@ -197,7 +201,7 @@ def _validate_input_fidelity(input_fidelity: Optional[str]) -> None:
 def _validate_model(model: str) -> None:
     if not model.startswith(GPT_IMAGE_MODEL_PREFIX):
         _die(
-            "model must be a GPT Image model (for example gpt-image-2.5-flare or gpt-image-2.5-sunburst)."
+            "model must be a GPT Image model (for example gpt-image-2.6-flare or gpt-image-2.6-sunburst)."
         )
 
 
@@ -217,7 +221,7 @@ def _validate_model_specific_options(
     if background == "transparent":
         _die(
             "transparent backgrounds are not supported in gpt-image-2. "
-            "Choose a compatible model explicitly, such as gpt-image-2.5-flare or gpt-image-2.5-sunburst."
+            "Choose a compatible model explicitly, such as gpt-image-2.6-flare or gpt-image-2.6-sunburst."
         )
     if input_fidelity is not None:
         _die(
@@ -952,7 +956,7 @@ class _FileBundle:
 def _add_shared_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "--model", default=DEFAULT_MODEL,
-        help="GPT Image model (default: gpt-image-2.5-flare); aliases: flare, sunburst",
+        help=f"GPT Image model (default: {DEFAULT_MODEL}); aliases: {', '.join(MODEL_ALIASES)}",
     )
     parser.add_argument("--prompt")
     parser.add_argument("--prompt-file")
@@ -991,7 +995,7 @@ def _add_shared_args(parser: argparse.ArgumentParser) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Generate or edit images through the API (default: gpt-image-2.5-flare)"
+        description=f"Generate or edit images through the API (default: {DEFAULT_MODEL})"
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
